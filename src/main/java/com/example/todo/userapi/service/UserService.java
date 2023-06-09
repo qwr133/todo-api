@@ -1,6 +1,7 @@
 package com.example.todo.userapi.service;
 
-
+import com.example.todo.exception.DuplicatedEmailException;
+import com.example.todo.exception.NoRegisteredArgumentsException;
 import com.example.todo.userapi.dto.request.UserRequestSignUpDTO;
 import com.example.todo.userapi.dto.response.UserSignUpResponseDTO;
 import com.example.todo.userapi.entity.User;
@@ -16,28 +17,38 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
 
-    //회원가입 처리
-    public UserSignUpResponseDTO create(final UserRequestSignUpDTO dto){
+    // 회원가입 처리
+    public UserSignUpResponseDTO create(final UserRequestSignUpDTO dto)
+            throws RuntimeException {
 
-        if (dto==null || dto.getEmail().equals("")) {
-            throw new RuntimeException("가입정보가 없습니다");
+        if (dto == null) {
+            throw new NoRegisteredArgumentsException("가입 정보가 없습니다.");
+        }
+        String email = dto.getEmail();
+
+        if (isDuplicate(email)) {
+            log.warn("이메일이 중복되었습니다. - {}", email);
+            throw new DuplicatedEmailException("중복된 이메일입니다.");
         }
 
-        if(userRepository.existsByEmail(dto.getEmail())){
-            log.warn("이메일이 중복되었습니다 -{}", dto.getEmail());
-            throw new RuntimeException("중복된 이메일 입니다");
-        }
-        //패스워드 인코딩
-        String encoded = passwordEncoder.encode(dto.getPassword());
+        // 패스워드 인코딩
+        String encoded = encoder.encode(dto.getPassword());
         dto.setPassword(encoded);
-        //유저 엔터티로 변환
+
+        // 유저 엔터티로 변환
         User user = dto.toEntity();
+
         User saved = userRepository.save(user);
 
-        log.info("회원가입이 정상 수행됨 - saved user - {}", saved);
+        log.info("회원가입 정상 수행됨! - saved user - {}", saved);
 
         return new UserSignUpResponseDTO(saved);
+
+    }
+
+    public boolean isDuplicate(String email) {
+        return userRepository.existsByEmail(email);
     }
 }
