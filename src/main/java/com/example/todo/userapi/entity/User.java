@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter @Getter
+//@Setter
+@Getter
 @ToString
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
@@ -46,5 +47,9 @@ public class User {
     @Builder.Default
     private Role role = Role.COMMON; // 유저 권한
 
-
+    // 등급 수정 메서드 -- 실무에서 setter가 불변성을 깨기 때문에 따로 만들어주기
+    //필요한것만 메서드로 사용해서 쓰기
+    public void changeRole(Role role) {
+        this.role = role;
+    }
 }
