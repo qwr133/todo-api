@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-
+//게시물 등록 인가처리
 public interface TodoRepository
         extends JpaRepository<Todo, String> {
 
@@ -16,8 +16,8 @@ public interface TodoRepository
     @Query("SELECT t FROM Todo t WHERE t.user = :user")
     List<Todo> findAllByUser(@Param("user") User user);
 
-    //회원이 작성한 일정의 개수를 리턴
-    @Query("SELECT COUNT(*) FROM todo t WHERE t.user=:user")
+    // 회원이 작성한 일정의 개수를 리턴
+    @Query("SELECT COUNT(*) FROM Todo t WHERE t.user=:user")
     int countByUser(@Param("user") User user);
 
 }

@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+//할일기능, 회원가입, 할일 인증처리, 게시물 등록 인가처리, cross origin config
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/todos")
+@CrossOrigin
 //@CrossOrigin(origins = "http://localhost:3000")
 public class TodoController {
 
@@ -41,16 +43,17 @@ public class TodoController {
         }
 
         try {
-            TodoListResponseDTO responseDTO = todoService.create(requestDTO, userInfo);
+            TodoListResponseDTO responseDTO
+                    = todoService.create(requestDTO, userInfo);
             return ResponseEntity
                     .ok()
                     .body(responseDTO);
-
-        }catch (IllegalStateException e){
-            //권한때문에 발생한 예외
+        } catch (IllegalStateException e) {
+            // 권한때문에 발생한 예외
             log.warn(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
         } catch (RuntimeException e) {
             log.error(e.getMessage());
             return ResponseEntity
@@ -62,6 +65,7 @@ public class TodoController {
 
     // 할 일 삭제 요청
     @DeleteMapping("/{id}")
+//    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteTodo(
             @AuthenticationPrincipal TokenUserInfo userInfo
             , @PathVariable("id") String todoId
