@@ -17,11 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+//로그인 회원가입, 로그인, 등급업 인가처리, 프로필 이미지처리 , aws 순
 @Service
 @Slf4j
 @RequiredArgsConstructor

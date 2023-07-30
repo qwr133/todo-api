@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 
 
-
+//user 회원가입, 로그인 가능, 등급업 인가처리, 프로필이미지 처리
 @RestController
 @Slf4j
 @RequiredArgsConstructor
