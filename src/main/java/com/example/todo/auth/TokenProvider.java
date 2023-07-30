@@ -49,7 +49,7 @@ public class TokenProvider {
                     "role": "Premium"
 
                     == 서명
-                }
+               }
          */
 
         // 추가 클레임 정의
